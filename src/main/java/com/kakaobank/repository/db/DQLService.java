@@ -11,10 +11,6 @@ public class DQLService extends SQLiteManager {
 
     private final static Logger log = LogManager.getLogger(DQLService.class);
 
-    public DQLService() {
-
-    }
-
     public DQLService(String dbFileName) {
         super(dbFileName);
     }

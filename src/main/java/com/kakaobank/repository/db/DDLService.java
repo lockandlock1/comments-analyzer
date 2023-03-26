@@ -75,7 +75,7 @@ public class DDLService extends SQLiteManager {
         ResultSet tables = meta.getTables(null, null, tableName, null);
 
         // 테이블 생성 확인
-        return (tables.next() ? tables.getRow() != 0 : false);
+        return (tables.next() && tables.getRow() != 0);
     }
 
     // 테이블 생성 함수
