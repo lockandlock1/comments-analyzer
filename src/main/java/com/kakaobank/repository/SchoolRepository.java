@@ -1,13 +1,10 @@
 package com.kakaobank.repository;
 
 import com.kakaobank.domain.school.School;
-import com.kakaobank.domain.school.SchoolToken;
 import com.kakaobank.repository.db.DQLService;
-import com.kakaobank.util.AnalyzerUtils;
+
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SchoolRepository {
 
@@ -19,7 +16,6 @@ public class SchoolRepository {
     }
 
     public List<School> findBySchoolNameAndLevel(String schoolName, String levelPattern) {
-
         return new ArrayList<>(db.selectSchoolList(schoolName, levelPattern));
     }
 

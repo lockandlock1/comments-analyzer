@@ -49,7 +49,7 @@ public class App {
 //        System.out.println(outputFilePath);
 //
         CommentsAnalyzerService service = new CommentsAnalyzerService();
-        Map<String, Integer> result = service.analyze("test.csv");
+        Map<String, Integer> result = service.analyze("daegu.csv");
 
         log.info("analyze file name={}", "comments.csv");
 

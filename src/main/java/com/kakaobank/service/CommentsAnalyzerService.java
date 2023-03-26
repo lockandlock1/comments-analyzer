@@ -182,9 +182,9 @@ public class CommentsAnalyzerService {
 
 
         if (kindPatterns.size() > 0) {
-            matchedPatterns.add(Pattern.compile(String.format("(%s)+.*%s$",
-                    Pattern.quote(String.join("|", kindPatterns)),
-                    Pattern.quote(levelPattern))));
+            System.out.println(String.join("|", kindPatterns));
+            String matchedRegex = "(" + String.join("|", kindPatterns) + ")" + "+.*" + levelPattern + "$";
+            matchedPatterns.add(Pattern.compile(matchedRegex));
         }
 
         List<School> schools = repository.findBySchoolNameAndLevel(schoolToken.getSchoolName(), levelPattern)
