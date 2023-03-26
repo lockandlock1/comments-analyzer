@@ -1,6 +1,6 @@
 package com.kakaobank;
 
-import com.kakaobank.repository.db.SQLiteManager;
+
 import com.kakaobank.service.CommentsAnalyzerService;
 import com.kakaobank.domain.exporter.Exporter;
 import com.kakaobank.domain.exporter.TextFileExporter;
@@ -8,15 +8,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 
 public class App {
 
     private final static Logger log = LogManager.getLogger(App.class);
+
+    private static final String PROJECT_FOLDER_NAME = "comments-analyzer";
 
     public static void main(String[] args) {
 
@@ -48,16 +47,17 @@ public class App {
 //
 //        System.out.println(inputFilePath);
 //        System.out.println(outputFilePath);
-
+//
         CommentsAnalyzerService service = new CommentsAnalyzerService();
         Map<String, Integer> result = service.analyze("test.csv");
 
         log.info("analyze file name={}", "comments.csv");
 
-        Exporter exporter = new TextFileExporter(result, "/Users/redkyu/Documents/git_src/study/school-name-searcher");
+        String resultFilePath = System.getProperty("user.home") + File.separator + PROJECT_FOLDER_NAME;
 
-        log.info("text file export filePath={}", "/Users/redkyu/Documents/git_src/study/school-name-searcher");
+        log.info("text file export filePath={}", resultFilePath);
 
+        Exporter exporter = new TextFileExporter(result, resultFilePath);
         exporter.export();
     }
 
