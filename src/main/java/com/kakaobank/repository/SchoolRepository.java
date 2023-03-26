@@ -32,24 +32,22 @@ public class SchoolRepository {
                     Pattern.quote(levelPattern))));
         }
 
-        // SQLite 연결 및 데이터 읽어오기
-        List<School> schools = db.selectSchoolList(schoolToken.getSchoolName(), levelPattern);
 
-        Map<String, Integer> schoolStatistics = calculateSchoolStatistics(schools, schoolToken, matchedPatterns, unmatchedPatterns);
+        List<School> schools = calculateSchoolStatistics(db.selectSchoolList(schoolToken.getSchoolName(), levelPattern), schoolToken, matchedPatterns, unmatchedPatterns);
 
-        if (schoolStatistics.size() == 0) {
+
+
+        if (schools.size() == 0) {
             return null;
         }
 
-        List<String> list = new ArrayList<>(schoolStatistics.keySet());
-
-        list.sort(new Comparator<String>() {
+        schools.sort(new Comparator<School>() {
             @Override
-            public int compare(String o1, String o2) {
-                Integer o1Value = schoolStatistics.get(o1);
-                Integer o2Value = schoolStatistics.get(o2);
-                Integer o1Len = o1.length();
-                Integer o2Len = o2.length();
+            public int compare(School o1, School o2) {
+                Integer o1Value = o1.getScore();
+                Integer o2Value = o2.getScore();
+                Integer o1Len = o1.getName().length();
+                Integer o2Len = o2.getName().length();
                 if (o1Value.equals(o2Value)) {
                     return o1Len.compareTo(o2Len);
                 } else {
@@ -59,13 +57,15 @@ public class SchoolRepository {
         });
 
 
-        return list.get(0);
+
+        return schools.get(0).getName();
     }
 
-    private Map<String, Integer> calculateSchoolStatistics(List<School> schools, SchoolToken schoolToken, List<Pattern> matchedPatterns, List<Pattern> unmatchedPatterns) {
-        Map<String, Integer> schoolStatistics = new HashMap<>();
+
+    private List<School> calculateSchoolStatistics(List<School> schools, SchoolToken schoolToken, List<Pattern> matchedPatterns, List<Pattern> unmatchedPatterns) {
+        List<School> list = new ArrayList<>();
         for (School school : schools) {
-            int score = calculateScore(schoolToken, school);
+            calculateScore(schoolToken, school);
 
             int matched = patternFindFromSchoolName(school.getName(), matchedPatterns);
             int unmatched = patternFindFromSchoolName(school.getName(), unmatchedPatterns);
@@ -73,36 +73,34 @@ public class SchoolRepository {
             if (matched != matchedPatterns.size() || unmatched > 0) continue;
 
 
-            schoolStatistics.put(school.getName(), score);
+            list.add(school);
         }
 
-        return new HashMap<>(schoolStatistics);
+        return new ArrayList<>(list);
     }
 
-    private int calculateScore(SchoolToken schoolToken, School school) {
-        int score = 0;
+    private void calculateScore(SchoolToken schoolToken, School school) {
         if (schoolToken.isGirlKind() && school.getGender().equals("녀")) {
-            score++;
+            school.plusScore();
         }
 
         if (!schoolToken.isGirlKind() && !school.getGender().equals("녀")) {
-            score++;
+            school.plusScore();
         }
 
 
         if (schoolToken.isSpecialKind() && Arrays.asList("특수목적고등학교", "특성화고등학교").contains(school.getProperty())) {
-            score++;
+            school.plusScore();
         }
 
         if (schoolToken.hasLocationIn(school.getName())) {
-            score++;
+            school.plusScore();;
         }
 
         if (schoolToken.hasLocationIn(school.getLocation())) {
-            score++;
+            school.plusScore();
         }
 
-        return score;
     }
 
     private int patternFindFromSchoolName(String schoolName, List<Pattern> patterns) {

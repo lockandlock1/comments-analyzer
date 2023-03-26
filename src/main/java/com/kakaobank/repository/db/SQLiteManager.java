@@ -64,9 +64,6 @@ public class SQLiteManager {
             log.error("close connection error", e);
         } finally {
             this.conn = null;
-
-            // 로그 출력
-            log.debug("database close connection");
         }
     }
 

@@ -24,7 +24,7 @@ public class DQLService extends SQLiteManager {
 
         Connection conn = ensureConnection();
         PreparedStatement pstmt = null;
-        log.debug("database connect");
+
 
         try {
 

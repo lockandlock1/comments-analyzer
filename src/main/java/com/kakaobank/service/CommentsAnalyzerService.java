@@ -45,7 +45,7 @@ public class CommentsAnalyzerService {
         Map<String, Integer> schoolStatusBoard = new HashMap<>();
         Path path = Paths.get(RESOURCES + fileName);
 
-        log.info("analyze start");
+        log.info("comments analyze start");
         try {
             CSVReader reader = new CSVReaderBuilder(new InputStreamReader(Files.newInputStream(path), StandardCharsets.UTF_8))
                     .withSkipLines(1).build();
@@ -63,6 +63,7 @@ public class CommentsAnalyzerService {
                     schoolStatusBoard.put(school, value);
                 }
             }
+            log.info("comments analyze end");
         } catch (IOException e) {
             log.error("path file error", e);
         } catch (CsvValidationException e) {

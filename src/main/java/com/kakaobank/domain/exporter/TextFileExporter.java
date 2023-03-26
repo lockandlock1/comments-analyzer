@@ -35,6 +35,7 @@ public class TextFileExporter implements Exporter {
         Path folderPath = Paths.get(outputFilePath);
 
         File file = new File(path.toUri());
+        log.info("export start");
         try {
             Files.createDirectories(folderPath);
 
@@ -49,6 +50,8 @@ public class TextFileExporter implements Exporter {
             }
 
             writer.close();
+
+            log.info("export end");
         } catch (IOException e) {
             log.error("Text File Export Error", e);
             throw new RuntimeException(e);
